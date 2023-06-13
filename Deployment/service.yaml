@@ -7,12 +7,12 @@ metadata:
   name: myservice
 spec:
   ports:
-  - name: bakehouseport
+  - name: final_project_port
     port: 80
     protocol: TCP
     targetPort: 80
   selector:
-    app: bakehouse
+    app: final_project
   type: NodePort
 status:
   loadBalancer: {}
