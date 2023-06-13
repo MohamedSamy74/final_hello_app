@@ -26,6 +26,7 @@ pipeline {
                                 mv Deployment/deploy.yaml Deployment/deploy.yaml.tmp
                                 cat Deployment/deploy.yaml.tmp | envsubst > Deployment/deploy.yaml
                                 rm -f Deployment/deploy.yaml.tmp
+                                gcloud container clusters get-credentials primary-cluster --zone us-central1-a --project lab1-test-project
                                 kubectl apply -f Deployment --kubeconfig=${KUBECONFIG}
                             '''
                         }
