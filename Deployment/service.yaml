@@ -7,12 +7,12 @@ metadata:
   name: myservice
 spec:
   ports:
-  - name: final_project_port
+  - name: final-project-port
     port: 80
     protocol: TCP
     targetPort: 80
   selector:
-    app: final_project
+    app: final-project
   type: NodePort
 status:
   loadBalancer: {}
