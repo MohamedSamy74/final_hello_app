@@ -2,21 +2,21 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: final_project
-  name: final_project
+    app: final-project
+  name: final-project
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: final_project
+      app: final-project
   template:
     metadata:
       labels:
-        app: final_project
+        app: final-project
     spec:
       containers:
       - image: msami74/final_project:v${BUILD_NUMBER}
-        name: final_project
+        name: final-project
         imagePullPolicy: Always
         ports:
         - containerPort: 80
