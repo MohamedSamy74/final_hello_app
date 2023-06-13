@@ -1,23 +1,18 @@
 pipeline {
-    agent { label 'my-project' }
+    agent { label 'final_project' }
     stages {
         stage('build') {
             steps {
                 echo 'build'
                 script{
-                    if (BRANCH_NAME == "dev" || BRANCH_NAME == "test" || BRANCH_NAME == "preprod") {
-                        withCredentials([usernamePassword(credentialsId: 'my-dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        withCredentials([usernamePassword(credentialsId: 'dockerhub_cred', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                             sh '''
                                 docker login -u ${USERNAME} -p ${PASSWORD}
-                                docker build -t msami74/bakehouseiti:v${BUILD_NUMBER} .
-                                docker push msami74/bakehouseiti:v${BUILD_NUMBER}
+                                docker build -t msami74/final_project:v${BUILD_NUMBER} .
+                                docker push msami74/final_project:v${BUILD_NUMBER}
                                 echo ${BUILD_NUMBER} > ../build.txt
                             '''
                         }
-                    }
-                    else {
-                        echo "user choosed ${BRANCH_NAME}"
-                    }
                 }
             }
         }
@@ -25,8 +20,7 @@ pipeline {
             steps {
                 echo 'deploy'
                 script {
-                    if (BRANCH_NAME == "release") {
-                        withCredentials([file(credentialsId: 'new-config', variable: 'KUBECONFIG')]) {
+                        withCredentials([file(credentialsId: 'my_config_file', variable: 'KUBECONFIG')]) {
                             sh '''
                                 export BUILD_NUMBER=$(cat ../build.txt)
                                 mv Deployment/deploy.yaml Deployment/deploy.yaml.tmp
@@ -35,7 +29,6 @@ pipeline {
                                 kubectl apply -f Deployment --kubeconfig=${KUBECONFIG}
                             '''
                         }
-                    }
                 }
             }
         }
